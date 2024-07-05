@@ -13,8 +13,10 @@ public class EventTriggerNewGame: EventTrigger
 		PlayerPrefs.SetInt("HP", -1);
 		PlayerPrefs.SetInt("score", 0);
 		PlayerPrefs.SetInt("totalScore", 0);
-		PlayerPrefs.SetInt("stage", 1);
- 		SceneManager.LoadScene(1);
+		PlayerPrefs.SetInt("stage", 2);
+		PlayerPrefs.SetInt("nbrDeath", 0);
+		PlayerPrefs.SetInt("mapSauv", 0);
+ 		SceneManager.LoadScene(2);
 	}
 }
 

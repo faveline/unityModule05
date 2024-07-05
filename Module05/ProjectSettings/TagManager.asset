@@ -9,6 +9,7 @@ TagManager:
   - mainCam
   - Ending
   - canvaUI
+  - collect
   layers:
   - Default
   - TransparentFX

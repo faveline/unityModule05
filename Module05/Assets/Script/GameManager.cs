@@ -37,9 +37,9 @@ public class GameManager : MonoBehaviour
 	private int			score;
 	public GameObject	ending;
 	private Color		modifTrans;
-	private int			totalScore;
-	private int			totalDeath;
 	public GameObject	canvaUI;
+	public GameObject	collectible;
+	private int			tmpB;
 
 	void Start() {
 		playerHPMax = playerHP;
@@ -47,15 +47,29 @@ public class GameManager : MonoBehaviour
 		moveTime = 0.001f;
 		nextMove = 0f;
 		moveLeaf = new Vector3(0, 0.06f, 0);
-		score = 0;
-		totalScore = 0;
-		totalDeath = 0;
-		modifTrans = new Color(0, 0, 0, 0.15f);
+		modifTrans = new Color(0, 0, 0, 0.17f);
 		animPlayer = player.transform.GetChild(0).GetComponent<Animator>();
 		leaf.transform.position = new Vector3(Random.Range(-7f, 14f), 10, 0);
 		if (PlayerPrefs.GetInt("HP") == -1)
 			PlayerPrefs.SetInt("HP", playerHPMax);
-		//score = PlayerPrefs.GetInt("score");
+		else {
+			playerHP = PlayerPrefs.GetInt("HP");
+			if (playerHP < playerHPMax) {
+				for (int i = playerHP; i < playerHPMax; i++)
+					canvaUI.transform.GetChild(i).gameObject.SetActive(false);
+			}
+		}
+		score = PlayerPrefs.GetInt("score");
+		canvaUI.transform.GetChild(4).transform.GetComponent<Text>().text = score.ToString();
+		if (PlayerPrefs.GetInt("score") >= 25)
+			canvaUI.transform.GetChild(4).transform.GetComponent<Text>().color = new Color(11, 170, 0, 255);
+		tmpB = PlayerPrefs.GetInt("mapSauv");
+		for (int i = collectible.transform.childCount - 1; i >= 0; i--) {
+			if (tmpB - Mathf.Pow(2, i) >= 0) {
+				Destroy(collectible.transform.Find(i.ToString()).gameObject);
+				tmpB -= Mathf.RoundToInt(Mathf.Pow(2, i));
+			}
+		}
 	}
 
 	void OnLevelWasLoaded(){
@@ -64,6 +78,7 @@ public class GameManager : MonoBehaviour
 		leaf = GameObject.FindGameObjectsWithTag("leaf")[0];
 		ending = GameObject.FindGameObjectsWithTag("Ending")[0];
 		canvaUI = GameObject.FindGameObjectsWithTag("canvaUI")[0];
+		collectible = GameObject.FindGameObjectsWithTag("collect")[0];
 		animPlayer = player.transform.GetChild(0).GetComponent<Animator>();
 		leaf.transform.position = new Vector3(Random.Range(-7f, 14f), 10, 0);
 	}
@@ -95,7 +110,7 @@ public class GameManager : MonoBehaviour
 	public void deathPlayer() {
 		animPlayer.SetTrigger("isDead");
 		alive = false;
-		totalDeath++;
+		PlayerPrefs.SetInt("nbrDeath", PlayerPrefs.GetInt("nbrDeath") + 1);
 	}
 
 	public int	getHpMax() {
@@ -106,15 +121,16 @@ public class GameManager : MonoBehaviour
 		return (score);
 	}
 
-	public void	scoreInc() {
+	public void	scoreInc(Collider2D other) {
 		score += 5;
-		totalScore += 5;
 		PlayerPrefs.SetInt("score", score);
-		PlayerPrefs.SetInt("totalScore", totalScore);
+		PlayerPrefs.SetInt("totalScore", PlayerPrefs.GetInt("totalScore") + 5);
 		canvaUI.transform.GetChild(4).transform.GetComponent<Text>().text = score.ToString();
 		if (score == 25)
 			canvaUI.transform.GetChild(4).transform.GetComponent<Text>().color = new Color(11, 170, 0, 255);
 		ending.transform.GetComponent<SpriteRenderer>().color += modifTrans;
+		PlayerPrefs.SetInt("mapSauv", PlayerPrefs.GetInt("mapSauv") + Mathf.RoundToInt(Mathf.Pow(2, int.Parse(other.transform.name))));
+		Destroy(other.gameObject);
 	}
 
 	public void	changeScene() {
@@ -123,6 +139,9 @@ public class GameManager : MonoBehaviour
 		PlayerPrefs.SetInt("HP", playerHP);
 		PlayerPrefs.SetInt("stage", PlayerPrefs.GetInt("stage") + 1);
 		PlayerPrefs.SetInt("score", score);
+		PlayerPrefs.SetInt("mapSauv", 0);
+		if (SceneManager.GetActiveScene().buildIndex == 4)
+			Destroy(GameManager.Instance.gameObject);
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 }

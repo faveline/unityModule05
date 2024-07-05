@@ -9,6 +9,6 @@ public class EventTriggerResume: EventTrigger
 {
 	public override void OnPointerClick(PointerEventData data)
 	{
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(PlayerPrefs.GetInt("stage"));
 	}
 }

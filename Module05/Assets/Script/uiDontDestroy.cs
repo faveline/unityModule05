@@ -23,10 +23,17 @@ public class uiDontDestroy : MonoBehaviour
 
 	private GameObject	canvaUI;
 
+
+	void Start() {
+	}
+
 	void OnLevelWasLoaded(){
 		canvaUI = GameObject.FindGameObjectsWithTag("canvaUI")[0];
 		for (int i = 0; i < GameManager.Instance.getHpMax(); i++) {
-			GameManager.Instance.canvaUI.transform.GetChild(i).gameObject.SetActive(true);
+			if (PlayerPrefs.GetInt("HP") > i)
+				GameManager.Instance.canvaUI.transform.GetChild(i).gameObject.SetActive(true);
+			else
+				GameManager.Instance.canvaUI.transform.GetChild(i).gameObject.SetActive(false);
 		}
 		canvaUI.transform.GetChild(4).transform.GetComponent<Text>().text = "0";
 	}

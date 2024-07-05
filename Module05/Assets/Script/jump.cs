@@ -19,7 +19,6 @@ public class jump : MonoBehaviour
        	if (Input.GetKeyDown(KeyCode.Space) && isGrounded) {
 			transform.parent.GetComponent<Rigidbody2D>().AddForce(Vector2.up * jumpVar, ForceMode2D.Impulse);
 			anim.SetTrigger("isJumping");
-			isGrounded = false;
 		} 
     }
 

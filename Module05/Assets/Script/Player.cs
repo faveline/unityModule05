@@ -58,6 +58,10 @@ public class Player : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.R)) {
 			GameManager.Instance.deathPlayer();
 		}
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Destroy(GameManager.Instance.gameObject);
+			SceneManager.LoadScene(0);
+		}
     }
 
 	void OnCollisionEnter2D(Collision2D other) {
@@ -70,9 +74,8 @@ public class Player : MonoBehaviour
  	}
 
 	void OnTriggerEnter2D(Collider2D other) {
-		if (other.gameObject.layer == 9) {
-			Destroy(other.gameObject);
-			GameManager.Instance.scoreInc();	
+		if (other.gameObject.layer == 9) {	
+			GameManager.Instance.scoreInc(other);	
 		}
 		if (other.gameObject.layer == 10 && GameManager.Instance.getScore() >= 25) {
 			GameManager.Instance.changeScene();
