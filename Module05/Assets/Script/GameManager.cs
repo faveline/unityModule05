@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
 		modifTrans = new Color(0, 0, 0, 0.17f);
 		animPlayer = player.transform.GetChild(0).GetComponent<Animator>();
 		leaf.transform.position = new Vector3(Random.Range(-7f, 14f), 10, 0);
-		if (PlayerPrefs.GetInt("HP") == -1)
+		if (PlayerPrefs.GetInt("HP") == -1 || PlayerPrefs.GetInt("HP") == 0)
 			PlayerPrefs.SetInt("HP", playerHPMax);
 		else {
 			playerHP = PlayerPrefs.GetInt("HP");

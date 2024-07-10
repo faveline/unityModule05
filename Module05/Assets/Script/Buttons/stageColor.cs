@@ -9,7 +9,6 @@ public class stageColor : MonoBehaviour
 
     void Start() {
 		if (PlayerPrefs.GetInt("stage") < nbrStage + 1) {
-			Debug.Log(nbrStage);
         	transform.GetComponent<Image>().color = new Color(0.4f, 0.4f, 0.4f, 0.4f);
 		}
     }

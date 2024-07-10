@@ -59,6 +59,7 @@ public class Player : MonoBehaviour
 			GameManager.Instance.deathPlayer();
 		}
 		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Destroy(GameManager.Instance.canvaUI);
 			Destroy(GameManager.Instance.gameObject);
 			SceneManager.LoadScene(0);
 		}
